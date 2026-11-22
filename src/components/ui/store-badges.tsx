@@ -22,6 +22,12 @@ function PlayMark({ className }: { className?: string }) {
 
 type Tone = "dark" | "light";
 
+/**
+ * Two equal columns shared by the store badges and the hero buttons, so
+ * rows of call-to-action buttons line up edge to edge.
+ */
+export const CTA_GRID = "grid w-full max-w-[360px] grid-cols-2 gap-2 sm:max-w-[440px] sm:gap-3";
+
 function Badge({
   href,
   icon,
@@ -37,9 +43,9 @@ function Badge({
 }) {
   const live = Boolean(href);
   const cls = cn(
-    // Compact on phones so both badges share a row; full size from sm up.
-    "flex h-[50px] min-w-0 items-center justify-center gap-2 rounded-[14px] px-2.5 text-left transition-[transform,background-color] duration-200 ease-[var(--ease-out)]",
-    "sm:inline-flex sm:h-[54px] sm:min-w-[172px] sm:justify-start sm:gap-3 sm:pl-4 sm:pr-5",
+    // Fills its grid column, so both badges are always the same width.
+    "flex h-[50px] w-full min-w-0 items-center justify-center gap-2 rounded-[14px] px-2.5 text-left transition-[transform,background-color] duration-200 ease-[var(--ease-out)]",
+    "sm:h-[54px] sm:gap-3 sm:px-4",
     tone === "dark"
       ? "bg-ink text-text-inverse ring-1 ring-ink"
       : "bg-surface-raised text-ink ring-1 ring-border",
@@ -73,7 +79,7 @@ function Badge({
 /** App Store and Google Play buttons. Links come only from site config; otherwise "Coming soon". */
 export function StoreBadges({ tone = "dark", className }: { tone?: Tone; className?: string }) {
   return (
-    <div className={cn("grid max-w-[360px] grid-cols-2 gap-2 sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:gap-3", className)}>
+    <div className={cn(CTA_GRID, className)}>
       <Badge
         href={links.appStore}
         tone={tone}

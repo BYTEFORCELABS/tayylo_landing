@@ -36,7 +36,7 @@ export function FinalCta() {
                 Get started
               </ButtonLink>
             )}
-            <StoreBadges tone="light" className="justify-center" />
+            <StoreBadges tone="light" className="mx-auto w-full justify-center" />
           </div>
         </Reveal>
       </div>

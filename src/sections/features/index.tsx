@@ -1,7 +1,7 @@
-import Image from "next/image";
 import { Reveal } from "@/components/ui/reveal";
 import { DataVisual } from "./data-visual";
 import { DocumentsVisual } from "./documents-visual";
+import { FabricRail } from "./fabric-rail";
 import { FeatureBlock } from "./feature-block";
 import { MeasureVisual } from "./measure-visual";
 import { SearchVisual } from "./search-visual";
@@ -30,7 +30,7 @@ export function Features() {
         />
       </div>
 
-      {/* Measure — olive-tinted band */}
+      {/* Measure: olive-tinted band */}
       <div className="bg-olive-soft/70">
         <div className="mx-auto max-w-7xl px-4 py-24 sm:px-8 sm:py-32">
           <FeatureBlock
@@ -76,16 +76,9 @@ export function Features() {
               Snap the client&rsquo;s fabric, or pick the closest swatch from the library.
             </p>
           </Reveal>
-          <ul className="no-scrollbar -mx-4 flex gap-3 overflow-x-auto px-4 lg:mx-0 lg:grid lg:flex-1 lg:grid-cols-6 lg:px-0">
-            {SWATCHES.map((s, i) => (
-              <Reveal as="li" key={s.name} delay={i * 0.05} y={14} className="w-[132px] shrink-0 lg:w-auto">
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[16px] ring-1 ring-border">
-                  <Image src={s.src} alt={`${s.name} swatch`} fill sizes="(min-width: 1024px) 160px, 132px" className="object-cover transition-transform duration-700 ease-[var(--ease-out)] hover:scale-105" />
-                </div>
-                <p className="mt-2 text-[13px] text-text-secondary">{s.name}</p>
-              </Reveal>
-            ))}
-          </ul>
+          <Reveal y={14} className="min-w-0 lg:flex-1">
+            <FabricRail swatches={SWATCHES} />
+          </Reveal>
         </div>
       </div>
 

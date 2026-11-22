@@ -128,20 +128,23 @@ export function Header() {
           </nav>
 
           <div className="flex shrink-0 items-center gap-1.5">
-            <ButtonLink
-              href={loginHref}
-              variant="ghost"
-              className={cn("hidden px-4 ring-1 ring-inset ring-border-strong/70 transition-[height,padding,background-color] hover:ring-olive/40 sm:inline-flex", floating && "h-11")}
-            >
-              Log in
-            </ButtonLink>
-            <ButtonLink
-              href={signupHref}
-              className={cn("hidden transition-[height,padding] sm:inline-flex", floating && "h-11")}
-              iconRight={<ArrowRight size={16} strokeWidth={2} className="transition-transform duration-200 group-hover/btn:translate-x-0.5" />}
-            >
-              Sign up
-            </ButtonLink>
+            {/* Desktop only: on smaller screens these live in the menu */}
+            <div className="hidden items-center gap-1.5 lg:flex">
+              <ButtonLink
+                href={loginHref}
+                variant="ghost"
+                className={cn("px-4 ring-1 ring-inset ring-border-strong/70 transition-[height,padding,background-color] hover:ring-olive/40", floating && "h-11")}
+              >
+                Log in
+              </ButtonLink>
+              <ButtonLink
+                href={signupHref}
+                className={cn("transition-[height,padding]", floating && "h-11")}
+                iconRight={<ArrowRight size={16} strokeWidth={2} className="transition-transform duration-200 group-hover/btn:translate-x-0.5" />}
+              >
+                Sign up
+              </ButtonLink>
+            </div>
             <button
               type="button"
               className={cn("inline-flex size-11 items-center justify-center rounded-full text-ink transition-colors lg:hidden", open ? "bg-olive text-text-inverse" : "hover:bg-ink/5")}

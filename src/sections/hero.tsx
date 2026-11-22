@@ -135,11 +135,17 @@ export function Hero() {
             Tayylo keeps your clients, their measurements and every order in one calm place on your phone. Find anyone in seconds, measure with a keypad built for the tape, and follow each garment from cutting to collection.
           </motion.p>
 
-          <motion.div {...fadeUp(0.72)} className="mt-9 flex flex-wrap items-center gap-3">
-            <ButtonLink href={getStartedHref} size="lg" iconRight={<ArrowRight size={18} strokeWidth={2} className="transition-transform duration-200 group-hover/btn:translate-x-0.5" />}>
+          {/* Side by side on phones too: small size below sm, full size above */}
+          <motion.div {...fadeUp(0.72)} className="mt-9 flex flex-wrap items-center gap-2 sm:gap-3">
+            <ButtonLink
+              href={getStartedHref}
+              size="sm"
+              className="sm:h-13 sm:px-7 sm:text-base"
+              iconRight={<ArrowRight size={17} strokeWidth={2} className="transition-transform duration-200 group-hover/btn:translate-x-0.5" />}
+            >
               {getStartedHref.startsWith("/#") ? "Get the app" : "Get started"}
             </ButtonLink>
-            <ButtonLink href="#features" size="lg" variant="secondary" iconRight={<ArrowDown size={18} strokeWidth={2} />}>
+            <ButtonLink href="#features" size="sm" variant="secondary" className="sm:h-13 sm:px-7 sm:text-base" iconRight={<ArrowDown size={17} strokeWidth={2} />}>
               See it at work
             </ButtonLink>
           </motion.div>

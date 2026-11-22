@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type Variant = "primary" | "secondary" | "ghost" | "light" | "outline-light";
-type Size = "md" | "lg";
+type Size = "sm" | "md" | "lg";
 
 const base =
   "group/btn relative inline-flex items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap select-none " +
@@ -21,6 +21,7 @@ const variants: Record<Variant, string> = {
 };
 
 const sizes: Record<Size, string> = {
+  sm: "h-11 px-4 text-[14px]",
   md: "h-11 px-5 text-[15px]",
   lg: "h-13 px-7 text-base",
 };

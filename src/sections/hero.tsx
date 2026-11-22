@@ -8,10 +8,11 @@ import { TapeRule } from "@/components/brand/tape-rule";
 import { PhoneFrame } from "@/components/phone/phone-frame";
 import { TodayScene, todaySteps } from "@/components/phone/scenes/today-scene";
 import { ButtonLink } from "@/components/ui/button";
-import { StoreBadges } from "@/components/ui/store-badges";
+import { CTA_GRID, StoreBadges } from "@/components/ui/store-badges";
 import { getStartedHref } from "@/config/site";
 import { useTimeline } from "@/hooks/use-timeline";
 import { EASE } from "@/lib/motion";
+import { cn } from "@/lib/utils";
 
 // The hero plays the opening of the Today scene and stops on the alert badge.
 const HERO_STEPS = [1500, ...todaySteps.slice(0, 3), 99999];
@@ -135,17 +136,17 @@ export function Hero() {
             Tayylo keeps your clients, their measurements and every order in one calm place on your phone. Find anyone in seconds, measure with a keypad built for the tape, and follow each garment from cutting to collection.
           </motion.p>
 
-          {/* Side by side on phones too: small size below sm, full size above */}
-          <motion.div {...fadeUp(0.72)} className="mt-9 flex flex-wrap items-center gap-2 sm:gap-3">
+          {/* Same two equal columns as the store badges below, so the rows line up */}
+          <motion.div {...fadeUp(0.72)} className={cn(CTA_GRID, "mt-9")}>
             <ButtonLink
               href={getStartedHref}
               size="sm"
-              className="sm:h-13 sm:px-7 sm:text-base"
+              className="w-full sm:h-13 sm:px-5 sm:text-base"
               iconRight={<ArrowRight size={17} strokeWidth={2} className="transition-transform duration-200 group-hover/btn:translate-x-0.5" />}
             >
               {getStartedHref.startsWith("/#") ? "Get the app" : "Get started"}
             </ButtonLink>
-            <ButtonLink href="#features" size="sm" variant="secondary" className="sm:h-13 sm:px-7 sm:text-base" iconRight={<ArrowDown size={17} strokeWidth={2} />}>
+            <ButtonLink href="#features" size="sm" variant="secondary" className="w-full sm:h-13 sm:px-5 sm:text-base" iconRight={<ArrowDown size={17} strokeWidth={2} />}>
               See it at work
             </ButtonLink>
           </motion.div>

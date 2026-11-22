@@ -37,7 +37,9 @@ function Badge({
 }) {
   const live = Boolean(href);
   const cls = cn(
-    "inline-flex h-[54px] min-w-[172px] items-center gap-3 rounded-[14px] pl-4 pr-5 text-left transition-[transform,background-color] duration-200 ease-[var(--ease-out)]",
+    // Compact on phones so both badges share a row; full size from sm up.
+    "flex h-[50px] min-w-0 items-center justify-center gap-2 rounded-[14px] px-2.5 text-left transition-[transform,background-color] duration-200 ease-[var(--ease-out)]",
+    "sm:inline-flex sm:h-[54px] sm:min-w-[172px] sm:justify-start sm:gap-3 sm:pl-4 sm:pr-5",
     tone === "dark"
       ? "bg-ink text-text-inverse ring-1 ring-ink"
       : "bg-surface-raised text-ink ring-1 ring-border",
@@ -47,10 +49,10 @@ function Badge({
     <>
       {icon}
       <span className="flex flex-col leading-none">
-        <span className={cn("text-[11px] font-medium", tone === "dark" ? "text-text-inverse/70" : "text-text-tertiary")}>
+        <span className={cn("whitespace-nowrap text-[10px] font-medium sm:text-[11px]", tone === "dark" ? "text-text-inverse/70" : "text-text-tertiary")}>
           {live ? kicker : "Coming soon on"}
         </span>
-        <span className="mt-1 text-[18px] font-semibold tracking-[-0.01em]">{label}</span>
+        <span className="mt-1 whitespace-nowrap text-[14px] font-semibold tracking-[-0.01em] sm:text-[18px]">{label}</span>
       </span>
     </>
   );
@@ -71,20 +73,20 @@ function Badge({
 /** App Store and Google Play buttons. Links come only from site config; otherwise "Coming soon". */
 export function StoreBadges({ tone = "dark", className }: { tone?: Tone; className?: string }) {
   return (
-    <div className={cn("flex flex-wrap items-center gap-3", className)}>
+    <div className={cn("grid max-w-[360px] grid-cols-2 gap-2 sm:flex sm:max-w-none sm:flex-wrap sm:items-center sm:gap-3", className)}>
       <Badge
         href={links.appStore}
         tone={tone}
         kicker="Download on the"
         label="App Store"
-        icon={<AppleMark className="size-[26px] -mt-0.5" />}
+        icon={<AppleMark className="-mt-0.5 size-[21px] shrink-0 sm:size-[26px]" />}
       />
       <Badge
         href={links.playStore}
         tone={tone}
         kicker="Get it on"
         label="Google Play"
-        icon={<PlayMark className="size-[24px]" />}
+        icon={<PlayMark className="size-[20px] shrink-0 sm:size-[24px]" />}
       />
     </div>
   );

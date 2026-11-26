@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Montserrat, Patrick_Hand, Urbanist } from "next/font/google";
+import { TayyloMeasuringTapeCursor } from "@/components/brand/measuring-tape-cursor";
 import { MotionProvider } from "@/components/layout/motion-provider";
 import { site } from "@/config/site";
 import "./globals.css";
@@ -54,6 +55,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={`${montserrat.variable} ${urbanist.variable} ${patrickHand.variable}`}>
       <body>
         <MotionProvider>{children}</MotionProvider>
+        <TayyloMeasuringTapeCursor />
       </body>
     </html>
   );

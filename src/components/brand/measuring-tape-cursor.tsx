@@ -2,6 +2,8 @@
 
 import * as React from "react";
 import gsap from "gsap";
+import { MeasuringTapeToggle } from "@/components/brand/measuring-tape-toggle";
+import { setTapeCursorOn, useTapeCursorOn, useTapeCursorSupported } from "@/hooks/use-tape-cursor";
 
 /* ================================================================
    TAYYLO MEASURING TAPE TRAIL
@@ -44,22 +46,6 @@ const DAMP = 0.5;
 
 const INTERACTIVE = 'a, button, [role="button"], input, select, textarea, summary, label, [data-cursor="hover"]';
 
-const FINE = "(hover: hover) and (pointer: fine)";
-const REDUCE = "(prefers-reduced-motion: reduce)";
-
-function subscribe(cb: () => void) {
-  const a = window.matchMedia(FINE);
-  const b = window.matchMedia(REDUCE);
-  a.addEventListener("change", cb);
-  b.addEventListener("change", cb);
-  return () => {
-    a.removeEventListener("change", cb);
-    b.removeEventListener("change", cb);
-  };
-}
-const getSnapshot = () => window.matchMedia(FINE).matches && !window.matchMedia(REDUCE).matches;
-const getServerSnapshot = () => false;
-
 /** The spiral of tape layers seen on the side of the roll. */
 const SPIRAL = (() => {
   const r0 = 5.6;
@@ -92,8 +78,32 @@ const RIM_TICKS = (() => {
 type Pt = { x: number; y: number };
 const f = (n: number) => n.toFixed(1);
 
+/**
+ * The companion on desktop pointers, with a small floating switch so visitors
+ * can turn it off (it is on by default and their choice is remembered).
+ */
 export function TayyloMeasuringTapeCursor() {
-  const enabled = React.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const supported = useTapeCursorSupported();
+  const on = useTapeCursorOn();
+  // Keeps the tape mounted for its fade-out after the visitor switches it off.
+  const [fading, setFading] = React.useState(false);
+  const onGone = React.useCallback(() => setFading(false), []);
+
+  if (!supported) return null;
+  const toggle = () => {
+    if (on) setFading(true);
+    setTapeCursorOn(!on);
+  };
+  return (
+    <>
+      {(on || fading) && <TapeOverlay leaving={!on} onGone={onGone} />}
+      <MeasuringTapeToggle on={on} onToggle={toggle} />
+    </>
+  );
+}
+
+function TapeOverlay({ leaving, onGone }: { leaving: boolean; onGone: () => void }) {
+  const leavingRef = React.useRef(leaving);
 
   const rootRef = React.useRef<HTMLDivElement>(null);
   const trailRef = React.useRef<SVGGElement>(null);
@@ -106,8 +116,19 @@ export function TayyloMeasuringTapeCursor() {
   const bodyHeadRef = React.useRef<HTMLDivElement>(null);
   const spinRef = React.useRef<SVGGElement>(null);
 
+  // Switched off: fade the whole tape away, then let the parent unmount it.
   React.useEffect(() => {
-    if (!enabled) return;
+    leavingRef.current = leaving;
+    const root = rootRef.current!;
+    if (!leaving) return;
+    const tween = gsap.to(root, { opacity: 0, duration: 0.4, ease: "power2.out", overwrite: true, onComplete: onGone });
+    return () => {
+      // Switched back on mid-fade: bring it straight back.
+      if (tween.progress() < 1) gsap.to(root, { opacity: 1, duration: 0.3, ease: "power2.out", overwrite: true });
+    };
+  }, [leaving, onGone]);
+
+  React.useEffect(() => {
     const root = rootRef.current!;
     const trail = trailRef.current!;
     const edge = edgeRef.current!;
@@ -183,7 +204,7 @@ export function TayyloMeasuringTapeCursor() {
     };
 
     const onMove = (e: PointerEvent) => {
-      if (e.pointerType === "touch") return;
+      if (e.pointerType === "touch" || leavingRef.current) return;
       px = e.clientX;
       py = e.clientY;
       lastMove = performance.now();
@@ -416,9 +437,7 @@ export function TayyloMeasuringTapeCursor() {
       window.removeEventListener("blur", onLeave);
       gsap.killTweensOf([st, root, trail]);
     };
-  }, [enabled]);
-
-  if (!enabled) return null;
+  }, []);
 
   return (
     <div
